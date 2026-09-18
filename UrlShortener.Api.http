@@ -1,0 +1,37 @@
+@host = http://localhost:5080
+
+### Create a short URL
+POST {{host}}/api/urls
+Content-Type: application/json
+
+{
+  "url": "https://example.com/some/really/long/path?with=query&params=true"
+}
+
+### Create another short URL (used for the requests below)
+POST {{host}}/api/urls
+Content-Type: application/json
+
+{
+  "url": "https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis"
+}
+
+### Look up a short URL's details by its code (replace with a code from a response above)
+GET {{host}}/api/urls/ODcCk
+
+### Follow the short URL - redirects to the original URL and records a click
+GET {{host}}/ODcCk
+
+### Get click analytics for a short code (total clicks + recent click history)
+GET {{host}}/api/urls/ODcCk/analytics
+
+### Invalid URL - expect 400 with a validation problem response
+POST {{host}}/api/urls
+Content-Type: application/json
+
+{
+  "url": "not-a-valid-url"
+}
+
+### Unknown short code - expect 404
+GET {{host}}/api/urls/doesnotexist/analytics
